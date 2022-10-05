@@ -3,8 +3,8 @@
     "",
     "\\Assets",
     "\\Assets\\Scripts",
-    "\\Assets\\Scripts\\Managers"
+    "\\Assets\\Scripts\\Tank"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\Managers\\TankManager.cs",
+  "SelectedNode": "\\Assets\\Scripts\\Tank\\TankShooting.cs",
   "PreviewInSolutionExplorer": false
 }

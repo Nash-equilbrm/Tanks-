@@ -11,10 +11,10 @@ public class ShellExplosion : MonoBehaviour
     public float m_ExplosionRadius = 5f;              
 
 
-    private void Start()
-    {
-        Destroy(gameObject, m_MaxLifeTime);
-    }
+    //private void Start()
+    //{
+    //    Destroy(gameObject, m_MaxLifeTime);
+    //}
 
 
     private void OnTriggerEnter(Collider other)
@@ -41,14 +41,14 @@ public class ShellExplosion : MonoBehaviour
             targetHealth.TakeDamage(damage);
 
         }
-        m_ExplosionParticles.transform.parent = null;
+        //m_ExplosionParticles.transform.parent = null;
 
         m_ExplosionParticles.Play();
 
         m_ExplosionAudio.Play();
 
-        Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.main.duration);
-        Destroy(gameObject);
+        //Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.main.duration);
+        //Destroy(gameObject);
     }
 
 
