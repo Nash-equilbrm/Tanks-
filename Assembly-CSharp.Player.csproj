@@ -56,9 +56,11 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Tank\FiringStyle\RapidFiring.cs" />
     <Compile Include="Assets\Scripts\Tank\TankMovement.cs" />
     <Compile Include="Assets\Scripts\MyEnum.cs" />
     <Compile Include="Assets\Scripts\Tank\TankHealth.cs" />
+    <Compile Include="Assets\Scripts\Tank\FiringStyle\FanFiring.cs" />
     <Compile Include="Assets\Scripts\Shell\ShellExplosion.cs" />
     <Compile Include="Assets\_Completed-Assets\Scripts\Shell\ShellExplosion.cs" />
     <Compile Include="Assets\Scripts\UI\UIDirectionControl.cs" />
@@ -78,8 +80,8 @@
     <Compile Include="Assets\Scripts\ObjectPooling\ObjectPooler.cs" />
     <Compile Include="Assets\_Completed-Assets\Scripts\Tank\TankMovement.cs" />
     <Compile Include="Assets\Scripts\Tank\FiringStyle\SingleFiring.cs" />
-    <Compile Include="Assets\Scripts\Tank\FiringStyle\RapidFiring.cs" />
-    <Compile Include="Assets\Scripts\Tank\FiringStyle\FanFiring.cs" />
+    <Compile Include="Assets\Scripts\Shell\ShellTrajectoryControl.cs" />
+    <Compile Include="Assets\Scripts\Shell\ShellTypes\BaseShellTrajectory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\Bowlby_One\FontLicense.txt" />
