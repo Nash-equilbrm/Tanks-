@@ -1,10 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Assets",
     "\\Assets\\Scripts",
-    "\\Assets\\Scripts\\Tank"
+    "\\Assets\\Scripts\\Managers"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\Tank\\TankShooting.cs",
+  "SelectedNode": "\\Tank!!.sln",
   "PreviewInSolutionExplorer": false
 }

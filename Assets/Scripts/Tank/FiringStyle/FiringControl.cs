@@ -4,27 +4,35 @@ using UnityEngine;
 
 public class FiringControl: MonoBehaviour
 {
-    public class FiringStyleFactory
+    private int m_TotalBulletWave;
+    private float m_BulletWaveInterval;
+    //private FiringStyleConfig m_FiringStyleConfig;
+    private BaseFiring NewFiringStyle(MyEnum.FireStyle fireStyle)
     {
-        public static BaseFiring NewFiringStyle(MyEnum.FireStyle fireStyle)
+        switch (fireStyle)
         {
-            switch (fireStyle)
-            {
-                case MyEnum.FireStyle.SINGLE_FIRE:
-                    return new SingleFiring();
+            case MyEnum.FireStyle.SINGLE_FIRE:
+                m_TotalBulletWave = 1;
+                m_BulletWaveInterval = 0f;
+                return new SingleFiring();
 
-                case MyEnum.FireStyle.RAPID_FIRE:
-                    return new RapidFiring();
+            case MyEnum.FireStyle.RAPID_FIRE:
+                m_TotalBulletWave = 3;
+                m_BulletWaveInterval = 0.1f;
+                return new RapidFiring();
 
-                case MyEnum.FireStyle.FAN_FIRE:
-                    return new FanFiring();
+            case MyEnum.FireStyle.FAN_FIRE:
+                m_TotalBulletWave = 1;
+                m_BulletWaveInterval = 0;
+                return new FanFiring();
 
-                default:
-                    return null;
+            default:
+                return null;
 
-            }
         }
     }
+
+
     public Transform m_FireTransform;
 
     public MyEnum.FireStyle m_FiringStyleEnum = MyEnum.FireStyle.SINGLE_FIRE;
@@ -36,40 +44,77 @@ public class FiringControl: MonoBehaviour
     private float m_LauchForce;
 
 
+    private int m_BulletWaveCount;
+    private float m_IntervalCountDown;
+
     public AudioClip m_ChargingClip;
     public AudioClip m_FireClip;
     public AudioSource m_ShootingAudio;
 
+
     private void Start()
     {
-        m_FiringStyle = FiringStyleFactory.NewFiringStyle(m_FiringStyleEnum);
+        // INIT FIRING STYLE
+        m_FiringStyle = NewFiringStyle(m_FiringStyleEnum);
         m_LastFiringStyle = m_FiringStyleEnum;
+
     }
     private void Update()
     {
         // Save previous firing style, if current firing style enum change, create a new Firing STYLE
         if (m_FiringStyleEnum != m_LastFiringStyle)
         {
-            m_FiringStyle = FiringStyleFactory.NewFiringStyle(m_FiringStyleEnum);
+            m_FiringStyle = NewFiringStyle(m_FiringStyleEnum);
             m_LastFiringStyle = m_FiringStyleEnum;
         }
+       
 
+    }
+
+    private void FixedUpdate()
+    {
         if (m_Firing)
         {
-            Fire(m_LauchForce);
-            OnEndFiring();
+            // if finish firing
+            if (m_BulletWaveCount >= m_TotalBulletWave)
+            {
+                m_Firing = false;
+                return;
+            }
+            // fire
+            if (m_IntervalCountDown <= 0)
+            {
+                Fire(m_LauchForce);
+                ++m_BulletWaveCount;
+                Debug.Log("m_BulletWaveCount: " + m_BulletWaveCount);
+
+                m_IntervalCountDown = m_BulletWaveInterval;
+
+            }
+            else
+            {
+                m_IntervalCountDown -= Time.deltaTime;
+            }
+            //CheckEndFiring();
         }
     }
 
+
+    private void InitFiringStyleConfig() { 
+
+    }
+
     // signal the flag for firing control start to update with firing methods
-    public void OnStartFiring(float launchForce)
+    public void StartFiring(float launchForce)
     {
+        m_BulletWaveCount = 0;
+        m_IntervalCountDown = 0;
         m_Firing = true;
         m_LauchForce = launchForce;
     }
 
     // if the firing method has finish its behaviors (how it fire shells), then fire control also stop
-    public void OnEndFiring()
+    public void CheckEndFiring()
     {
         if(!m_FiringStyle.IsFiring())
             m_Firing = false;

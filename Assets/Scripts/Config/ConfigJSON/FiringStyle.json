@@ -1,0 +1,20 @@
+{
+    "fireStyle":{
+        "0": {
+            "name": "SingleFiring",
+            "totalBulletWave": 1,
+            "bulletWaveInterval": 0
+        },
+        "1": {
+            "name": "FanFiring",
+            "totalBulletWave": 1,
+            "bulletWaveInterval": 0
+        },
+        "2": {
+            "id": 2,
+            "name": "RapidFiring",
+            "totalBulletWave": 3,
+            "bulletWaveInterval": 0.1
+        }
+    }
+}

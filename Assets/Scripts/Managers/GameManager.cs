@@ -18,13 +18,22 @@ public class GameManager : MonoBehaviour
     private WaitForSeconds m_StartWait;     
     private WaitForSeconds m_EndWait;       
     private TankManager m_RoundWinner;
-    private TankManager m_GameWinner;       
+    private TankManager m_GameWinner;
 
+    #region Singleton
+    public static GameManager Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
+    #endregion
 
     private void Start()
     {
         m_StartWait = new WaitForSeconds(m_StartDelay);
         m_EndWait = new WaitForSeconds(m_EndDelay);
+
+        GetGameConfig();
 
         SpawnAllTanks();
         SetCameraTargets();
@@ -32,6 +41,12 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GameLoop());
     }
 
+    private void GetGameConfig()
+    {
+        // Fire style
+
+
+    }
 
     private void SpawnAllTanks()
     {

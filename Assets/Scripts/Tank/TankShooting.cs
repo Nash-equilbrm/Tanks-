@@ -83,7 +83,8 @@ public class TankShooting : MonoBehaviour
         // Instantiate and launch the shell.
         m_Fired = true;
         // start firing with current launch force
-        m_FiringControl.OnStartFiring(m_CurrentLaunchForce);
+        m_FiringControl.StartFiring(m_CurrentLaunchForce);
+
 
         m_CurrentLaunchForce = m_MinLaunchForce;
     }

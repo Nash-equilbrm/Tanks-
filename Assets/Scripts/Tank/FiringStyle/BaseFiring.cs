@@ -7,7 +7,7 @@ public class BaseFiring
    
     public virtual void Fire(Transform fireTransform, float launchForce)
     {
-        m_OnFiring = true;
+        //m_OnFiring = true;
     }
     public void SingleFire(Transform fireTransform, float launchForce)
     {
