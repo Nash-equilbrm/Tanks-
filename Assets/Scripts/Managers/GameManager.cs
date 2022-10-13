@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using System.Threading.Tasks;
+using System.Threading;
 public class GameManager : MonoBehaviour
 {
     public int m_NumRoundsToWin = 5;        
@@ -29,7 +30,8 @@ public class GameManager : MonoBehaviour
         SpawnAllTanks();
         SetCameraTargets();
 
-        StartCoroutine(GameLoop());
+        //StartCoroutine(GameLoop());
+        GameLoop();
     }
 
 
@@ -58,11 +60,14 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator GameLoop()
+
+    private async void GameLoop()
     {
-        yield return StartCoroutine(RoundStarting());
-        yield return StartCoroutine(RoundPlaying());
-        yield return StartCoroutine(RoundEnding());
+        Debug.Log("GameLoop");
+        await RoundStarting();
+        await RoundPlaying();
+        await RoundEnding();
+
 
         if (m_GameWinner != null)
         {
@@ -70,46 +75,54 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GameLoop());
+            GameLoop();
         }
     }
 
 
-    private IEnumerator RoundStarting()
+    private async Task RoundStarting()
     {
+        Debug.Log("RoundStarting");
+
+
         ResetAllTanks();
         DisableTankControl();
-        
+
         m_CameraControl.SetStartPositionAndSize();
 
         m_RoundNumber++;
 
         m_MessageText.text = "ROUND " + m_RoundNumber;
-        yield return m_StartWait;
+
+        await Task.Delay((int)(m_StartDelay * 1000));
     }
 
 
-    private IEnumerator RoundPlaying()
+    private async Task RoundPlaying()
     {
+        Debug.Log("RoundPlaying");
+
         EnableTankControl();
 
         m_MessageText.text = string.Empty;
 
         while (!OneTankLeft())
         {
-            yield return null;
+            await Task.Yield();
         }
     }
 
 
-    private IEnumerator RoundEnding()
+    private async Task RoundEnding()
     {
+        Debug.Log("RoundEnding");
+
         DisableTankControl();
 
         m_RoundWinner = null;
 
         m_RoundWinner = GetRoundWinner();
-        if(m_RoundWinner != null)
+        if (m_RoundWinner != null)
         {
             m_RoundWinner.m_Wins++;
         }
@@ -119,8 +132,73 @@ public class GameManager : MonoBehaviour
         string message = EndMessage();
         m_MessageText.text = message;
 
-        yield return m_EndWait;
+        await Task.Delay((int)(m_EndDelay * 1000));
     }
+
+
+    //private IEnumerator GameLoop()
+    //{
+    //    yield return StartCoroutine(RoundStarting());
+    //    yield return StartCoroutine(RoundPlaying());
+    //    yield return StartCoroutine(RoundEnding());
+
+    //    if (m_GameWinner != null)
+    //    {
+    //        SceneManager.LoadScene(0);
+    //    }
+    //    else
+    //    {
+    //        StartCoroutine(GameLoop());
+    //    }
+    //}
+
+
+    //private IEnumerator RoundStarting()
+    //{
+    //    ResetAllTanks();
+    //    DisableTankControl();
+
+    //    m_CameraControl.SetStartPositionAndSize();
+
+    //    m_RoundNumber++;
+
+    //    m_MessageText.text = "ROUND " + m_RoundNumber;
+    //    yield return m_StartWait;
+    //}
+
+
+    //private IEnumerator RoundPlaying()
+    //{
+    //    EnableTankControl();
+
+    //    m_MessageText.text = string.Empty;
+
+    //    while (!OneTankLeft())
+    //    {
+    //        yield return null;
+    //    }
+    //}
+
+
+    //private IEnumerator RoundEnding()
+    //{
+    //    DisableTankControl();
+
+    //    m_RoundWinner = null;
+
+    //    m_RoundWinner = GetRoundWinner();
+    //    if (m_RoundWinner != null)
+    //    {
+    //        m_RoundWinner.m_Wins++;
+    //    }
+
+    //    m_GameWinner = GetGameWinner();
+
+    //    string message = EndMessage();
+    //    m_MessageText.text = message;
+
+    //    yield return m_EndWait;
+    //}
 
 
     private bool OneTankLeft()
@@ -129,7 +207,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < m_Tanks.Length; i++)
         {
-            if (m_Tanks[i].m_Instance.activeSelf)
+            if (m_Tanks[i].m_Instance.activeSelf && m_Tanks[i].m_Instance)
                 numTanksLeft++;
         }
 
