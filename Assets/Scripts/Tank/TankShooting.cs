@@ -19,6 +19,8 @@ public partial class TankShooting : MonoBehaviour
     private float m_ChargeSpeed;
     private bool m_Fired;
 
+    private bool m_IsActive = true;
+
 
     private void OnEnable()
     {
@@ -40,44 +42,48 @@ public partial class TankShooting : MonoBehaviour
 
     private void Update()
     {
-        // if the tank is currently firing bullets, do nothing until it finish.
-        if (!IsFiring())
+        // only update if the tank is able to shoot
+        if (m_IsActive)
         {
-            // Track the current state of the fire button and make decisions based on the current launch force.
-            m_AimSlider.value = m_MinLaunchForce;
-
-            if(m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
+            // if the tank is currently firing bullets, do nothing until it finish.
+            if (!IsFiring())
             {
-                // at max charge, not yet fired
-                m_CurrentLaunchForce = m_MaxLaunchForce;
-                Fire();
-            }
-            else if (Input.GetButtonDown(m_FireButton))
-            {
-                // just pressed fire button
-                m_Fired = false;
-                m_CurrentLaunchForce = m_MinLaunchForce;
+                // Track the current state of the fire button and make decisions based on the current launch force.
+                m_AimSlider.value = m_MinLaunchForce;
 
-                PlayChargingClip();
-            }
-            else if(Input.GetButton(m_FireButton) && !m_Fired)
-            {
-                // holding the fire button, not yet fired
-                m_CurrentLaunchForce += m_ChargeSpeed * Time.deltaTime;
+                if (m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
+                {
+                    // at max charge, not yet fired
+                    m_CurrentLaunchForce = m_MaxLaunchForce;
+                    Fire();
+                }
+                else if (Input.GetButtonDown(m_FireButton))
+                {
+                    // just pressed fire button
+                    m_Fired = false;
+                    m_CurrentLaunchForce = m_MinLaunchForce;
 
-                m_AimSlider.value = m_CurrentLaunchForce;
-            }
-            else if(Input.GetButtonUp(m_FireButton) && !m_Fired)
-            {
-                // released the fire button, not yet fired
-                Fire();
-                PlayFireClip();
+                    PlayChargingClip();
+                }
+                else if (Input.GetButton(m_FireButton) && !m_Fired)
+                {
+                    // holding the fire button, not yet fired
+                    m_CurrentLaunchForce += m_ChargeSpeed * Time.deltaTime;
 
+                    m_AimSlider.value = m_CurrentLaunchForce;
+                }
+                else if (Input.GetButtonUp(m_FireButton) && !m_Fired)
+                {
+                    // released the fire button, not yet fired
+                    Fire();
+                    PlayFireClip();
+
+                }
             }
+
+            FiringControlUpdate();
         }
-
-        FiringControlUpdate();
-
+        
     }
 
 
@@ -90,4 +96,11 @@ public partial class TankShooting : MonoBehaviour
 
         m_CurrentLaunchForce = m_MinLaunchForce;
     }
+
+    #region Getter setter
+    public void SetActive(bool active) {
+        m_IsActive = active;
+    }
+
+    #endregion
 }

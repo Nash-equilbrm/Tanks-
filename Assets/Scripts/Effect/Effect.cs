@@ -22,25 +22,7 @@ public class Effect
 
     private EffectBasicComponent NewEffectBasicComponent(EffectBasicComponentConfig config)
     {
-        switch (config.EffectBasicComponentEnum)
-        {
-            case MyEnum.EffectBasicComponent.HEALTH:
-                {
-                    return new EffectOnHP(config);
-                }
-            case MyEnum.EffectBasicComponent.SPEED:
-                {
-                    return new EffectOnSpeed(config);
-                }
-            case MyEnum.EffectBasicComponent.OTHER_EFFECT:
-                {
-                    return new EffectOnDisadvantageEffects(config);
-                }
-            default:
-                {
-                    return null;
-                }
-        }
+        return config.GetEffectBasicComponent();
     }
 
     public void ApplyEffect(Tank tank)

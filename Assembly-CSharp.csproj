@@ -101,6 +101,14 @@
     <Compile Include="Assets\Scripts\Configs &amp; Resources\FiringStyleConfig\FiringStyleConfig.cs" />
     <Compile Include="Assets\Scripts\Configs &amp; Resources\ShellConfig\ShellEffect\ShellEffectConfig.cs" />
     <Compile Include="Assets\Scripts\Tank\FiringStyle\SingleFiring.cs" />
+    <Compile Include="Assets\Scripts\Configs &amp; Resources\FiringStyleConfig\SingleFiringStyleConfig.cs" />
+    <Compile Include="Assets\Scripts\Configs &amp; Resources\FiringStyleConfig\RapidFiringStyleConfig.cs" />
+    <Compile Include="Assets\Scripts\Configs &amp; Resources\FiringStyleConfig\FanFiringStyleConfig.cs" />
+    <Compile Include="Assets\Scripts\Configs &amp; Resources\EffectConfig\EffectBasicComponent\EffectOnHPConfig.cs" />
+    <Compile Include="Assets\Scripts\Configs &amp; Resources\EffectConfig\EffectBasicComponent\EffectOnSpeedConfig.cs" />
+    <Compile Include="Assets\Scripts\Configs &amp; Resources\EffectConfig\EffectBasicComponent\EffectOnDisadvantageEffectsConfig.cs" />
+    <Compile Include="Assets\Scripts\Configs &amp; Resources\EffectConfig\EffectBasicComponent\EffectOnShootingConfig.cs" />
+    <Compile Include="Assets\Scripts\Effect\EffectBasicComponent\EffectOnShooting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\Bowlby_One\FontLicense.txt" />

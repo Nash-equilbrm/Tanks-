@@ -43,6 +43,7 @@ public class MyEnum
     {
         SPEED = 0,
         HEALTH = 1,
-        OTHER_EFFECT = 2
+        OTHER_EFFECT = 2,
+        SHOOTING = 3
     }
 }

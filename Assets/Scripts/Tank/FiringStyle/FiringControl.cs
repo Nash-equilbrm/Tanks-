@@ -26,23 +26,10 @@ public partial class TankShooting
     // Initialize current firing style
     public BaseFiring SetUpFiringStyle(MyEnum.FireStyle fireStyle)
     {
+        // Get config from Game Config instance
         m_FiringStyleConfig = GameConfig.Instance.FiringConfig((int)fireStyle);
-        // set up firing style
-        switch (fireStyle)
-        {
-            case MyEnum.FireStyle.SINGLE_FIRE:
-                return new SingleFiring(m_PlayerID);
 
-            case MyEnum.FireStyle.RAPID_FIRE:
-                return new RapidFiring(m_PlayerID);
-
-            case MyEnum.FireStyle.FAN_FIRE:
-                return new FanFiring(m_PlayerID);
-
-            default:
-                return null;
-
-        }
+        return m_FiringStyleConfig.GetBaseFiring(m_PlayerID);
     }
 
     private void FiringControlStart()
