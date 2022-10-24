@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class SingleFiring : BaseFiring
 {
+    public SingleFiring(int playerID) : base(playerID)
+    {
+
+    }
     public override void Fire(Transform fireTransform, float launchForce)
     {
-        base.Fire(fireTransform, launchForce);
         SingleFire(fireTransform, launchForce);
-        m_OnFiring = false;
     }
 }

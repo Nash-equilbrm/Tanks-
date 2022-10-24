@@ -6,7 +6,7 @@ public class TankManager
 {
     public Color m_PlayerColor;            
     public Transform m_SpawnPoint;         
-    [HideInInspector] public int m_PlayerNumber;             
+    [HideInInspector] public int m_PlayerID;             
     [HideInInspector] public string m_ColoredPlayerText;
     [HideInInspector] public GameObject m_Instance;          
     [HideInInspector] public int m_Wins;                     
@@ -14,19 +14,23 @@ public class TankManager
 
     private TankMovement m_Movement;       
     private TankShooting m_Shooting;
+    private TankHealth m_Health;
     private GameObject m_CanvasGameObject;
 
 
     public void Setup()
     {
-        m_Movement = m_Instance.GetComponent<TankMovement>();
-        m_Shooting = m_Instance.GetComponent<TankShooting>();
+        Tank tank = m_Instance.GetComponent<Tank>();
+        m_Movement = tank.GetTankMovement();
+        m_Shooting = tank.GetTankShooting();
+        m_Health = tank.GetTankHealth();
         m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas>().gameObject;
 
-        m_Movement.m_PlayerNumber = m_PlayerNumber;
-        m_Shooting.m_PlayerNumber = m_PlayerNumber;
+        m_Health.m_PlayerID = m_PlayerID;
+        m_Movement.m_PlayerID = m_PlayerID;
+        m_Shooting.m_PlayerID = m_PlayerID;
 
-        m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
+        m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerID + "</color>";
 
         MeshRenderer[] renderers = m_Instance.GetComponentsInChildren<MeshRenderer>();
 
@@ -34,8 +38,25 @@ public class TankManager
         {
             renderers[i].material.color = m_PlayerColor;
         }
+
+        // Create new pool of shells for this tank
+        string shellPoolTag = PublicVariables.ShellPoolTag + m_PlayerID.ToString();
+        ObjectPooler.Instance.pools.Add(new ObjectPooler.Pool(shellPoolTag, GameResource.Instance.ShellPrefab, PublicVariables.ShellPoolSize));
+
+        
     }
 
+    public void SetTankIDToShells()
+    {
+        string shellPoolTag = PublicVariables.ShellPoolTag + m_PlayerID.ToString();
+
+        for (int i = 0; i < PublicVariables.ShellPoolSize; ++i)
+        {
+            GameObject shell = ObjectPooler.Instance.poolDictionnary[shellPoolTag].Dequeue() as GameObject;
+            shell.GetComponent<Shell>().SetTankID(m_PlayerID);
+            ObjectPooler.Instance.poolDictionnary[shellPoolTag].Enqueue(shell);
+        }
+    }
 
     public void DisableControl()
     {

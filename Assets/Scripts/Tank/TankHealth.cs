@@ -3,7 +3,9 @@ using UnityEngine.UI;
 
 public class TankHealth : MonoBehaviour
 {
-    public float m_StartingHealth = 100f;          
+    public int m_PlayerID;
+
+    public float m_StartingHealth = 100f; 
     public Slider m_Slider;                        
     public Image m_FillImage;                      
     public Color m_FullHealthColor = Color.green;  
@@ -14,6 +16,8 @@ public class TankHealth : MonoBehaviour
     private AudioSource m_ExplosionAudio;
     private ParticleSystem m_ExplosionParticles;
     private float m_CurrentHealth;
+    private float m_MaxHealth = 100f;
+    private float m_MinHealth = 0.1f;
     private bool m_Dead;
 
 
@@ -34,13 +38,17 @@ public class TankHealth : MonoBehaviour
         SetHealthUI();
     }
 
+    private void FixedUpdate()
+    {
+        SetHealthUI();
+    }
 
     public void TakeDamage(float amount)
     {
         // Adjust the tank's current health, update the UI based on the new health and check whether or not the tank is dead.
         m_CurrentHealth -= amount;
 
-        SetHealthUI();
+        //SetHealthUI();
 
         if(m_CurrentHealth <= 0f && !m_Dead)
         {
@@ -71,5 +79,19 @@ public class TankHealth : MonoBehaviour
         m_ExplosionAudio.Play();
 
         gameObject.SetActive(false);
+    }
+
+    public void ChangeHPByAmount(float amount)
+    {
+        m_CurrentHealth = m_CurrentHealth + amount;
+        if (m_CurrentHealth > m_MaxHealth)
+        {
+            m_CurrentHealth = m_MaxHealth;
+        }
+        if(m_CurrentHealth < m_MinHealth)
+        {
+            m_CurrentHealth = m_MinHealth;
+        }
+        Debug.Log("HP: " + m_CurrentHealth);
     }
 }

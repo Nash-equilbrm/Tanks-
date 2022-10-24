@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class TankShooting : MonoBehaviour
+public partial class TankShooting : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;       
+    public int m_PlayerID = 1;       
     public Rigidbody m_Shell;            
     public Slider m_AimSlider;           
       
@@ -11,7 +11,7 @@ public class TankShooting : MonoBehaviour
     public float m_MaxLaunchForce = 30f; 
     public float m_MaxChargeTime = 0.75f;
 
-    public FiringControl m_FiringControl;
+    //public FiringControl m_FiringControl;
 
 
     private string m_FireButton;
@@ -29,18 +29,19 @@ public class TankShooting : MonoBehaviour
 
     private void Start()
     {
-        m_FireButton = "Fire" + m_PlayerNumber;
+        m_FireButton = "Fire" + m_PlayerID;
 
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
 
         //m_FiringControl = new FiringControl();
+        FiringControlStart();
     }
 
 
     private void Update()
     {
         // if the tank is currently firing bullets, do nothing until it finish.
-        if (!m_FiringControl.IsFiring())
+        if (!IsFiring())
         {
             // Track the current state of the fire button and make decisions based on the current launch force.
             m_AimSlider.value = m_MinLaunchForce;
@@ -57,7 +58,7 @@ public class TankShooting : MonoBehaviour
                 m_Fired = false;
                 m_CurrentLaunchForce = m_MinLaunchForce;
 
-                m_FiringControl.PlayChargingClip();
+                PlayChargingClip();
             }
             else if(Input.GetButton(m_FireButton) && !m_Fired)
             {
@@ -70,10 +71,12 @@ public class TankShooting : MonoBehaviour
             {
                 // released the fire button, not yet fired
                 Fire();
-                m_FiringControl.PlayFireClip();
+                PlayFireClip();
 
             }
         }
+
+        FiringControlUpdate();
 
     }
 
@@ -83,7 +86,7 @@ public class TankShooting : MonoBehaviour
         // Instantiate and launch the shell.
         m_Fired = true;
         // start firing with current launch force
-        m_FiringControl.OnStartFiring(m_CurrentLaunchForce);
+        OnStartFiring(m_PlayerID, m_CurrentLaunchForce);
 
         m_CurrentLaunchForce = m_MinLaunchForce;
     }

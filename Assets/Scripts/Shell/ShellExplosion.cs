@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class ShellExplosion : MonoBehaviour
 {
@@ -9,16 +10,16 @@ public class ShellExplosion : MonoBehaviour
     public float m_MaxDamage = 100f;                  
     public float m_ExplosionForce = 1000f;            
     public float m_MaxLifeTime = 2f;                  
-    public float m_ExplosionRadius = 5f;              
+    public float m_ExplosionRadius = 5f;
 
+    [SerializeField] private ShellEffectConfig m_ShellEffectConfig;
 
     //private void Start()
     //{
     //    Destroy(gameObject, m_MaxLifeTime);
     //}
 
-
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if(IsInLayerMask(other.gameObject, m_BulletMask))
         {
@@ -29,6 +30,7 @@ public class ShellExplosion : MonoBehaviour
         
         for(int i = 0; i < colliders.Length; ++i)
         {
+            // Calculate and deal damage to players
             Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
             
             if (!targetRigidbody)
@@ -36,7 +38,9 @@ public class ShellExplosion : MonoBehaviour
 
             targetRigidbody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
 
-            TankHealth targetHealth = targetRigidbody.GetComponent<TankHealth>();
+            Tank targetTank = targetRigidbody.GetComponent<Tank>();
+            //TankHealth targetHealth = targetRigidbody.GetComponent<TankHealth>();
+            TankHealth targetHealth = targetTank.GetTankHealth();
 
             if (!targetHealth)
                 continue;
@@ -44,6 +48,11 @@ public class ShellExplosion : MonoBehaviour
             float damage = CalculateDamage(targetRigidbody.position);
 
             targetHealth.TakeDamage(damage);
+
+
+            // Apply effect on tanks except for original one
+            ApplyEffectOnOpponents(targetTank);
+
 
         }
         //m_ExplosionParticles.transform.parent = null;
@@ -54,8 +63,16 @@ public class ShellExplosion : MonoBehaviour
 
         //Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.main.duration);
         //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
+    private void ApplyEffectOnOpponents(Tank tank)
+    {
+        if(m_ShellEffectConfig != null)
+        {
+            tank.GetTankEffectManager().AddNewEffect(m_ShellEffectConfig.EffectEnum);
+        }
+    }
 
     private float CalculateDamage(Vector3 targetPosition)
     {
@@ -69,11 +86,14 @@ public class ShellExplosion : MonoBehaviour
         float damage = relativeDistance * m_MaxDamage;
 
         damage = Mathf.Max(0f, damage);
-        return damage;
+        return 0;
     }
 
     public bool IsInLayerMask(GameObject obj, LayerMask layerMask)
     {
         return ((layerMask.value & (1 << obj.layer)) > 0);
     }
+
+
+
 }

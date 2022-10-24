@@ -10,6 +10,13 @@ public class ObjectPooler : MonoBehaviour
         public string tag;
         public GameObject prefab;
         public int size;
+
+        public Pool(string newTag, GameObject newPrefab, int newSize)
+        {
+            tag = newTag;
+            prefab = newPrefab;
+            size = newSize;
+        }
     }
 
     public List<Pool> pools;
@@ -21,19 +28,23 @@ public class ObjectPooler : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-    #endregion
-
-    // Start is called before the first frame update
-    void Start()
-    {
         poolDictionnary = new Dictionary<string, Queue<GameObject>>();
 
-        foreach(Pool pool in pools)
+    }
+    #endregion
+    // Start is called before the first frame update
+    private void Start()
+    {
+
+    }
+
+    public void SetUpPool()
+    {
+        foreach (Pool pool in pools)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
-            for(int i = 0; i < pool.size; ++i)
+            for (int i = 0; i < pool.size; ++i)
             {
                 GameObject obj = Instantiate(pool.prefab);
                 obj.SetActive(false);

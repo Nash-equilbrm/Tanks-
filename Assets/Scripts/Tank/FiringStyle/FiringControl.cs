@@ -2,89 +2,126 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FiringControl: MonoBehaviour
+public partial class TankShooting
 {
-    public class FiringStyleFactory
-    {
-        public static BaseFiring NewFiringStyle(MyEnum.FireStyle fireStyle)
-        {
-            switch (fireStyle)
-            {
-                case MyEnum.FireStyle.SINGLE_FIRE:
-                    return new SingleFiring();
-
-                case MyEnum.FireStyle.RAPID_FIRE:
-                    return new RapidFiring();
-
-                case MyEnum.FireStyle.FAN_FIRE:
-                    return new FanFiring();
-
-                default:
-                    return null;
-
-            }
-        }
-    }
+    //public int m_PlayerID;
     public Transform m_FireTransform;
 
-    public MyEnum.FireStyle m_FiringStyleEnum = MyEnum.FireStyle.SINGLE_FIRE;
+    [SerializeField] private FiringStyleConfig m_FiringStyleConfig;
+
+    [SerializeField] private MyEnum.FireStyle m_FiringStyleEnum = MyEnum.FireStyle.SINGLE_FIRE;
     private MyEnum.FireStyle m_LastFiringStyle;
 
     private BaseFiring m_FiringStyle ;
 
     private bool m_Firing;
     private float m_LauchForce;
-
+    private int m_BulletWaveCount = 0;
+    private float m_CountDown = 0;
 
     public AudioClip m_ChargingClip;
     public AudioClip m_FireClip;
     public AudioSource m_ShootingAudio;
 
-    private void Start()
+    // Initialize current firing style
+    public BaseFiring SetUpFiringStyle(MyEnum.FireStyle fireStyle)
     {
-        m_FiringStyle = FiringStyleFactory.NewFiringStyle(m_FiringStyleEnum);
+        m_FiringStyleConfig = GameConfig.Instance.FiringConfig((int)fireStyle);
+        // set up firing style
+        switch (fireStyle)
+        {
+            case MyEnum.FireStyle.SINGLE_FIRE:
+                return new SingleFiring(m_PlayerID);
+
+            case MyEnum.FireStyle.RAPID_FIRE:
+                return new RapidFiring(m_PlayerID);
+
+            case MyEnum.FireStyle.FAN_FIRE:
+                return new FanFiring(m_PlayerID);
+
+            default:
+                return null;
+
+        }
+    }
+
+    private void FiringControlStart()
+    {
+        m_FiringStyle = SetUpFiringStyle(m_FiringStyleEnum);
+
         m_LastFiringStyle = m_FiringStyleEnum;
     }
-    private void Update()
+    private void FiringControlUpdate()
     {
         // Save previous firing style, if current firing style enum change, create a new Firing STYLE
         if (m_FiringStyleEnum != m_LastFiringStyle)
         {
-            m_FiringStyle = FiringStyleFactory.NewFiringStyle(m_FiringStyleEnum);
+            m_FiringStyle = SetUpFiringStyle(m_FiringStyleEnum);
             m_LastFiringStyle = m_FiringStyleEnum;
         }
 
+        // Keep updating if firing action not finished
         if (m_Firing)
         {
-            Fire(m_LauchForce);
-            OnEndFiring();
+            // if finish firing, stop updating by set the m_Firing flag to false
+            if (m_BulletWaveCount == m_FiringStyleConfig.TotalBulletWave)
+            {
+                OnEndFiring();
+            }
+            else
+            {
+                OnFiring();
+            }
         }
     }
 
+   
+
     // signal the flag for firing control start to update with firing methods
-    public void OnStartFiring(float launchForce)
+    public void OnStartFiring(int playerID, float launchForce)
     {
+        m_PlayerID = playerID;
+
         m_Firing = true;
         m_LauchForce = launchForce;
     }
 
-    // if the firing method has finish its behaviors (how it fire shells), then fire control also stop
+    // Stop firing
     public void OnEndFiring()
     {
-        if(!m_FiringStyle.IsFiring())
-            m_Firing = false;
+        m_Firing = false;
+        m_BulletWaveCount = 0;
+        m_CountDown = 0;
     }
 
-    private void Fire(float launchForce)
+    // During firing
+    public void OnFiring()
     {
-        m_FiringStyle.Fire(m_FireTransform, launchForce);
+        // fire 1 wave of bullet every interval of time
+        if (m_CountDown <= 0)
+        {
+            Fire(m_LauchForce);
+            m_CountDown = m_FiringStyleConfig.Interval;
+            m_BulletWaveCount++;
+        }
+        else
+        {
+            m_CountDown -= Time.deltaTime;
+        }
     }
-
     public bool IsFiring()
     {
         return this.m_Firing;
     }
 
+    // Firing single bullet wave
+    // ** Each Fire method behave differently depend on each firing style
+    private void Fire(float launchForce)
+    {
+        m_FiringStyle.Fire(m_FireTransform, launchForce);
+    }
+
+    // Play audio clips
     public void PlayChargingClip()
     {
         m_ShootingAudio.clip = m_ChargingClip;

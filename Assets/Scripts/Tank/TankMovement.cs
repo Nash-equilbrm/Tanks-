@@ -2,8 +2,9 @@
 
 public class TankMovement : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;         
-    public float m_Speed = 12f;            
+    public int m_PlayerID = 1;         
+    private float m_Speed = 12f;
+    private float m_OriginalSpeed;
     public float m_TurnSpeed = 180f;       
     public AudioSource m_MovementAudio;    
     public AudioClip m_EngineIdling;       
@@ -18,6 +19,11 @@ public class TankMovement : MonoBehaviour
     private float m_TurnInputValue;
     private float m_OriginalPitch;
 
+    private float m_MinSpeed = 1f;
+
+    
+
+    private float m_MaxSpeed = 20f;
 
     private void Awake()
     {
@@ -41,10 +47,12 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
-        m_MovementAxisName = "Vertical" + m_PlayerNumber;
-        m_TurnAxisName = "Horizontal" + m_PlayerNumber;
+        m_MovementAxisName = "Vertical" + m_PlayerID;
+        m_TurnAxisName = "Horizontal" + m_PlayerID;
 
         m_OriginalPitch = m_MovementAudio.pitch;
+
+        m_OriginalSpeed = m_Speed;
     }
 
 
@@ -107,5 +115,25 @@ public class TankMovement : MonoBehaviour
         Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
 
         m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
+    }
+
+
+   public void ChangeSpeedByAmount(float percentage)
+    {
+        m_Speed = m_Speed * (1 + percentage);
+        if (m_Speed > m_MaxSpeed)
+        {
+            m_Speed = m_MaxSpeed;
+        }
+        if (m_Speed < m_MinSpeed)
+        {
+            m_Speed = m_MinSpeed;
+        }
+    }
+
+
+    public void ResetOriginalSpeed()
+    {
+        m_Speed = m_OriginalSpeed;
     }
 }
