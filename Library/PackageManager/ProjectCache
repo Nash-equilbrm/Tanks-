@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638019465508420994
-    m_Hash: 2085800348
+      ticks: 638022012894069817
+    m_Hash: 2564102680
   m_LockFileStatus:
     m_FilePath: D:/WorkSpace/Personal Game Dev/Tank!!/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638019465889586069
-    m_Hash: 3366779262
+      ticks: 638022012894069817
+    m_Hash: 1256413378
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -1299,12 +1299,14 @@ m_ResolvedPackages:
     - 1.7.0-pre.2
     - 1.7.0
     - 1.7.1
+    - 1.7.2
     compatible:
     - 1.6.4
     - 1.7.0-pre.1
     - 1.7.0-pre.2
     - 1.7.0
     - 1.7.1
+    - 1.7.2
     verified: 1.6.4
   dependencies:
   - name: com.unity.modules.director
@@ -3338,10 +3340,20 @@ m_ResolvedPackages:
     - 1.1.0-pre.10
     - 1.1.0-pre.11
     - 1.1.0-pre.41
+    - 1.1.0-pre.69
+    - 1.2.0
+    - 1.3.1
+    - 1.3.2
+    - 1.4.0
+    - 1.4.1
     - 1.4.2
+    - 1.4.3
+    - 1.5.2
     compatible:
     - 1.4.2
-    verified: 1.4.2
+    - 1.4.3
+    - 1.5.2
+    verified: 1.4.3
   dependencies:
   - name: com.unity.modules.unitywebrequest
     version: 1.0.0
@@ -3366,7 +3378,7 @@ m_ResolvedPackages:
     capabilities: 7
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 0
+  datePublishedTicks: 637919618520000000
   documentationUrl: 
   hasRepository: 1
   repository:
