@@ -7,5 +7,5 @@ public abstract class FiringStyleConfig : ScriptableObject
     public int TotalBulletWave;
     public float Interval;
 
-    public abstract BaseFiring GetBaseFiring(int playerID);
+    public abstract BaseFiring GetBaseFiring(TankShooting tankShooting);
 }

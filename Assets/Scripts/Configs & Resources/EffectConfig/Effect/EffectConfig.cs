@@ -6,5 +6,6 @@ using UnityEngine;
 public class EffectConfig : ScriptableObject
 {
     public bool BeneficialForTarget;
+    public int Priority;
     public EffectBasicComponentConfig[] EffectBasicComponents;
 }

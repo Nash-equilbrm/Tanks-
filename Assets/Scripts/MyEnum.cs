@@ -36,14 +36,29 @@ public class MyEnum
         STUN = 1,
         TOXIC = 2,
         HEAL = 3,
-        IMMUNITY = 4
+        IMMUNITY = 4,
+        ROOT = 5,
+        FREEZE = 6,
+        SLOW = 7,
     }
 
     public enum EffectBasicComponent
     {
         SPEED = 0,
-        HEALTH = 1,
-        OTHER_EFFECT = 2,
-        SHOOTING = 3
+        TURNING = 1,
+        HEALTH = 2,
+        OTHER_EFFECT = 3,
+        SHOOTING = 4
+    }
+
+
+    public enum TankStatus
+    {
+        NORMAL = 0,
+        STUN = 1,
+        TOXIC = 2,
+        SLOW = 3,
+        HEAL = 4,
+        IMMUNE = 5,
     }
 }

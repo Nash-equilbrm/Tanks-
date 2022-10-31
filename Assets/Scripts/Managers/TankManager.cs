@@ -15,6 +15,7 @@ public class TankManager
     private TankMovement m_Movement;       
     private TankShooting m_Shooting;
     private TankHealth m_Health;
+    private TankLaserShooting m_LaserShooting;
     private GameObject m_CanvasGameObject;
 
 
@@ -24,11 +25,13 @@ public class TankManager
         m_Movement = tank.GetTankMovement();
         m_Shooting = tank.GetTankShooting();
         m_Health = tank.GetTankHealth();
+        m_LaserShooting = tank.GetLaserShooting();
         m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas>().gameObject;
 
         m_Health.m_PlayerID = m_PlayerID;
         m_Movement.m_PlayerID = m_PlayerID;
         m_Shooting.m_PlayerID = m_PlayerID;
+        m_LaserShooting.m_PlayerID = m_PlayerID;
 
         m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerID + "</color>";
 

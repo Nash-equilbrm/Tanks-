@@ -17,7 +17,7 @@ public class TankHealth : MonoBehaviour
     private ParticleSystem m_ExplosionParticles;
     private float m_CurrentHealth;
     private float m_MaxHealth = 100f;
-    private float m_MinHealth = 0.1f;
+    private float m_MinHealth = 0f;
     private bool m_Dead;
 
 
@@ -83,6 +83,7 @@ public class TankHealth : MonoBehaviour
 
     public void ChangeHPByAmount(float amount)
     {
+        Debug.Log("ChangeHPByAmount: " + amount);
         m_CurrentHealth = m_CurrentHealth + amount;
         if (m_CurrentHealth > m_MaxHealth)
         {
@@ -92,6 +93,5 @@ public class TankHealth : MonoBehaviour
         {
             m_CurrentHealth = m_MinHealth;
         }
-        Debug.Log("HP: " + m_CurrentHealth);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RapidFiring : BaseFiring
 {
-    public RapidFiring(int playerID) : base(playerID)
+    public RapidFiring(TankShooting tankShooting) : base(tankShooting)
     {
 
     }

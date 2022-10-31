@@ -43,6 +43,7 @@ public class EffectBasicComponent
     {
         m_OnCountDown = true;
         m_CountDown = m_EffectBasicComponentConfig.Duration;
+        // interval count down from zero makes the effect apply right at the start
         m_IntervalCountDown = 0;
     }
 
@@ -73,6 +74,12 @@ public class EffectBasicComponent
     protected virtual void ApplyEffectBasicComponentAction(Tank tank, EffectBasicComponentConfig config)
     {
         
+    }
+
+    public void ForceEnd(Tank tank)
+    {
+        OnEndApplyEffectBasicComponent(tank);
+        m_Applied = true;
     }
 
 

@@ -4,8 +4,10 @@ public class TankMovement : MonoBehaviour
 {
     public int m_PlayerID = 1;         
     private float m_Speed = 12f;
-    private float m_OriginalSpeed;
     public float m_TurnSpeed = 180f;       
+    private float m_OriginalSpeed;
+    private float m_OriginalTurnSpeed;
+    
     public AudioSource m_MovementAudio;    
     public AudioClip m_EngineIdling;       
     public AudioClip m_EngineDriving;      
@@ -19,11 +21,10 @@ public class TankMovement : MonoBehaviour
     private float m_TurnInputValue;
     private float m_OriginalPitch;
 
-    private float m_MinSpeed = 1f;
-
-    
-
+    private float m_MinSpeed = 0f;
     private float m_MaxSpeed = 20f;
+    private float m_MinTurnSpeed = 0f;
+    private float m_MaxTurnSpeed = 360f;
 
     private void Awake()
     {
@@ -53,6 +54,7 @@ public class TankMovement : MonoBehaviour
         m_OriginalPitch = m_MovementAudio.pitch;
 
         m_OriginalSpeed = m_Speed;
+        m_OriginalTurnSpeed = m_TurnSpeed;
     }
 
 
@@ -120,6 +122,7 @@ public class TankMovement : MonoBehaviour
 
    public void ChangeSpeedByAmount(float percentage)
     {
+        Debug.Log("ChangeSpeedByAmount: " + percentage);
         m_Speed = m_Speed * (1 + percentage);
         if (m_Speed > m_MaxSpeed)
         {
@@ -131,9 +134,31 @@ public class TankMovement : MonoBehaviour
         }
     }
 
+    public void ChangeTurningSpeedOnAmount(float percentage)
+    {
+        Debug.Log("ChangeTurningSpeedOnAmount");
+        m_TurnSpeed = m_TurnSpeed * (1 + percentage);
+        if (m_TurnSpeed > m_MaxTurnSpeed)
+        {
+            m_TurnSpeed = m_MaxTurnSpeed;
+        }
+        if (m_TurnSpeed < m_MinTurnSpeed)
+        {
+            m_TurnSpeed = m_MinTurnSpeed;
+        }
+    }
+
+
 
     public void ResetOriginalSpeed()
     {
+        // CHECK STATUS
+
         m_Speed = m_OriginalSpeed;
+    }
+
+    public void ResetOriginalTurnSpeed()
+    {
+        m_TurnSpeed = m_OriginalTurnSpeed;
     }
 }

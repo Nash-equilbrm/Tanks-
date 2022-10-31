@@ -5,14 +5,13 @@ public partial class TankShooting : MonoBehaviour
 {
     public int m_PlayerID = 1;       
     public Rigidbody m_Shell;            
-    public Slider m_AimSlider;           
-      
+    public Slider m_AimSlider;     
+
+
     public float m_MinLaunchForce = 15f; 
     public float m_MaxLaunchForce = 30f; 
     public float m_MaxChargeTime = 0.75f;
-
-    //public FiringControl m_FiringControl;
-
+    public LayerMask m_TankLayerMask;
 
     private string m_FireButton;
     private float m_CurrentLaunchForce;
@@ -35,7 +34,6 @@ public partial class TankShooting : MonoBehaviour
 
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
 
-        //m_FiringControl = new FiringControl();
         FiringControlStart();
     }
 
@@ -99,6 +97,7 @@ public partial class TankShooting : MonoBehaviour
 
     #region Getter setter
     public void SetActive(bool active) {
+        Debug.Log("ShootingSetActive: " + active.ToString());
         m_IsActive = active;
     }
 

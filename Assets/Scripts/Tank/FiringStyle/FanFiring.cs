@@ -7,7 +7,7 @@ public class FanFiring : BaseFiring
     private int m_BulletTotal = 5;
     private float m_MaxAngleBetweenBullets = 20;
 
-    public FanFiring(int playerID): base(playerID)
+    public FanFiring(TankShooting tankShooting): base(tankShooting)
     {
        
     }

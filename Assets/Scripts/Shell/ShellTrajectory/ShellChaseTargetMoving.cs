@@ -8,10 +8,14 @@ public class ShellChaseTargetMoving : IShellMoving
     private Vector3 m_TargetPosition;
     private float m_DetectTargetRange = 10f;
     private float m_ChaseTargetSpeed = 8f;
+    private float m_RotationSpeed = 8f;
+
+
     public void MoveShell(Shell shell)
     {
         if (DetecTarget(shell))
         {
+            RotateTowardTarget(shell);
             MoveTowardTarget(shell);
         }
     }
@@ -19,6 +23,12 @@ public class ShellChaseTargetMoving : IShellMoving
     private void MoveTowardTarget(Shell shell)
     {
         shell.transform.position = Vector3.MoveTowards(shell.transform.position, m_TargetPosition, m_ChaseTargetSpeed * Time.deltaTime);
+    }
+
+    private void RotateTowardTarget(Shell shell) {
+        Vector3 direction = m_TargetPosition - shell.transform.position;
+        Quaternion finalRotation = Quaternion.LookRotation(direction);
+        shell.transform.rotation = Quaternion.Lerp(shell.transform.rotation, finalRotation, m_RotationSpeed * Time.deltaTime);
     }
 
     private bool DetecTarget(Shell shell)

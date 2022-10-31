@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Rapid Firing Config", menuName = "Rapid Firing Style Config")]
 public class RapidFiringStyleConfig : FiringStyleConfig
 {
-    public override BaseFiring GetBaseFiring(int playerID)
+    public override BaseFiring GetBaseFiring(TankShooting tankShooting)
     {
-        return new RapidFiring(playerID);
+        return new RapidFiring(tankShooting);
     }
 }

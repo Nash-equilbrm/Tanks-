@@ -35,7 +35,7 @@ public class Effect
             }
             if (CheckToBeRemove())
             {
-                m_ToBeRemove = true;
+                SetToRemove(true);
             }
         }
         
@@ -52,6 +52,18 @@ public class Effect
         }
         return cnt == m_EffectBasicComponents.Length;
     }
+
+
+    public void ForceRemove(Tank tank)
+    {
+        foreach (EffectBasicComponent effectBasicComponent in m_EffectBasicComponents)
+        {
+            effectBasicComponent.ForceEnd(tank);
+        }
+    }
+
+
+
 
     #region Getter Setter
     public EffectConfig GetConfig()

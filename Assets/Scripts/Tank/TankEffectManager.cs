@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class TankEffectManager : MonoBehaviour
 {
     [SerializeField] private Tank m_Tank;
+
 
     private List<Effect> m_ActiveEffects;
 
@@ -21,13 +23,13 @@ public class TankEffectManager : MonoBehaviour
 
     public void AddNewEffect(MyEnum.Effect effectEnum)
     {
-        Debug.Log("AddNewEffect: " + effectEnum.ToString());    
         Effect newEffect = NewEffect(effectEnum);
-        if(newEffect != null)
+        if (newEffect != null)
         {
             m_ActiveEffects.Add(newEffect);
         }
-       
+        SortEffectByPriority();
+
     }
 
     private void RemoveEffects()
@@ -52,7 +54,7 @@ public class TankEffectManager : MonoBehaviour
 
     private void ApplyEffects(Tank tank)
     {
-        foreach(Effect effect in m_ActiveEffects)
+        foreach (Effect effect in m_ActiveEffects)
         {
             effect.ApplyEffect(tank);
         }
@@ -65,29 +67,16 @@ public class TankEffectManager : MonoBehaviour
         {
             if (!effect.GetConfig().BeneficialForTarget)
             {
+                effect.ForceRemove(m_Tank);
                 effect.SetToRemove(true);
             }
         }
-       
+
     }
 
     private Effect NewEffect(MyEnum.Effect effectEnum)
     {
-        switch (effectEnum)
-        {
-            case MyEnum.Effect.STUN:
-            case MyEnum.Effect.HEAL: 
-            case MyEnum.Effect.TOXIC:
-            case MyEnum.Effect.IMMUNITY:
-                {
-                    return new Effect(GameConfig.Instance.EffectConfig((int) effectEnum));
-                }
-           
-            default:
-                {
-                    return null;
-                }
-        }
+        return new Effect(GameConfig.Instance.EffectConfig((int)effectEnum));
     }
 
     public void ResetActiveEffect()
@@ -97,4 +86,22 @@ public class TankEffectManager : MonoBehaviour
             effect.SetEffectActive(true);
         }
     }
+
+    public void SortEffectByPriority()
+    {
+        for (int i = 0; i < m_ActiveEffects.Count; ++i)
+        {
+            for (int j = i + 1; j < m_ActiveEffects.Count; ++j)
+            {
+                if (m_ActiveEffects[i].GetConfig().Priority < m_ActiveEffects[j].GetConfig().Priority)
+                {
+                    Effect tmp = m_ActiveEffects[i];
+                    m_ActiveEffects[i] = m_ActiveEffects[j];
+                    m_ActiveEffects[j] = tmp;
+                }
+            }
+
+        }
+    }
+
 }

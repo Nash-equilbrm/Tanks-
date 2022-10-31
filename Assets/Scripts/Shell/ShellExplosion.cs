@@ -4,7 +4,8 @@ using UnityEngine;
 public class ShellExplosion : MonoBehaviour
 {
     public LayerMask m_TankMask;
-    public LayerMask m_BulletMask;
+    public LayerMask m_IgnoreMask;
+
     public ParticleSystem m_ExplosionParticles;       
     public AudioSource m_ExplosionAudio;              
     public float m_MaxDamage = 100f;                  
@@ -12,16 +13,16 @@ public class ShellExplosion : MonoBehaviour
     public float m_MaxLifeTime = 2f;                  
     public float m_ExplosionRadius = 5f;
 
-    [SerializeField] private ShellEffectConfig m_ShellEffectConfig;
+    [SerializeField] private ShellEffectConfig[] m_ShellEffectConfigs;
 
     //private void Start()
     //{
     //    Destroy(gameObject, m_MaxLifeTime);
     //}
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if(IsInLayerMask(other.gameObject, m_BulletMask))
+        if(IsInLayerMask(other.gameObject, m_IgnoreMask))
         {
             return;
         }
@@ -68,10 +69,14 @@ public class ShellExplosion : MonoBehaviour
 
     private void ApplyEffectOnOpponents(Tank tank)
     {
-        if(m_ShellEffectConfig != null)
+        foreach (ShellEffectConfig shellEffectConfig in m_ShellEffectConfigs)
         {
-            tank.GetTankEffectManager().AddNewEffect(m_ShellEffectConfig.EffectEnum);
+            if (shellEffectConfig != null)
+            {
+                tank.GetTankEffectManager().AddNewEffect(shellEffectConfig.EffectEnum);
+            }
         }
+        
     }
 
     private float CalculateDamage(Vector3 targetPosition)

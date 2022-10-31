@@ -29,7 +29,7 @@ public partial class TankShooting
         // Get config from Game Config instance
         m_FiringStyleConfig = GameConfig.Instance.FiringConfig((int)fireStyle);
 
-        return m_FiringStyleConfig.GetBaseFiring(m_PlayerID);
+        return m_FiringStyleConfig.GetBaseFiring(this);
     }
 
     private void FiringControlStart()
@@ -51,7 +51,7 @@ public partial class TankShooting
         if (m_Firing)
         {
             // if finish firing, stop updating by set the m_Firing flag to false
-            if (m_BulletWaveCount == m_FiringStyleConfig.TotalBulletWave)
+            if (m_BulletWaveCount >= m_FiringStyleConfig.TotalBulletWave)
             {
                 OnEndFiring();
             }
@@ -88,6 +88,7 @@ public partial class TankShooting
         if (m_CountDown <= 0)
         {
             Fire(m_LauchForce);
+
             m_CountDown = m_FiringStyleConfig.Interval;
             m_BulletWaveCount++;
         }
